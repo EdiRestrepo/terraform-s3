@@ -1,0 +1,50 @@
+# ---- Terraform ----
+# Directorio de trabajo local (providers y modulos descargados)
+**/.terraform/*
+
+# Archivos de estado: nunca al repo, contienen datos sensibles
+*.tfstate
+*.tfstate.*
+*.tfstate.backup
+
+# Logs de crash
+crash.log
+crash.*.log
+
+# Archivos de plan (binarios, pueden contener secretos)
+*.tfplan
+*.tfplan.*
+
+# Overrides locales de cada desarrollador
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# Config del CLI con credenciales
+.terraformrc
+terraform.rc
+
+# ---- Variables ----
+# Los .tfvars suelen traer secretos. Se ignoran por defecto...
+*.tfvars
+*.tfvars.json
+# ...pero los de enviroments/ son config publica del proyecto y si se versionan.
+!enviroments/*.tfvars
+
+# NOTA: .terraform.lock.hcl SI se sube al repo (fija versiones de providers).
+
+# ---- Credenciales / secretos ----
+*.pem
+*.key
+.env
+.env.*
+!.env.example
+
+# ---- Editores / SO ----
+.vscode/
+.idea/
+*.swp
+Thumbs.db
+Desktop.ini
+.DS_Store
