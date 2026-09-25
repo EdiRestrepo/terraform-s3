@@ -53,3 +53,55 @@ variable "priv_subnets_az" {
   type        = list(string)
   default     = ["us-east-1a", "us-east-1d"]
 }
+
+########## Security Group ##########
+
+variable "sg_name" {
+  description = "Prefijo de nombre para el Security Group"
+  type        = string
+  default     = "SG-Lab-ITM"
+}
+
+variable "sg_description" {
+  description = "Descripcion del Security Group"
+  type        = string
+  default     = "Security group prueba"
+}
+
+########## EC2 ##########
+
+variable "instance_name" {
+  description = "Prefijo de nombre para la instancia EC2"
+  type        = string
+  default     = "EC2-Lab-ITM"
+}
+
+variable "instance_type" {
+  description = "Tipo de instancia EC2"
+  type        = string
+  default     = "t3.micro"
+}
+
+variable "ami_id" {
+  description = "AMI a usar. Si queda vacia se toma la ultima Amazon Linux 2023"
+  type        = string
+  default     = ""
+}
+
+variable "root_volume_size" {
+  description = "Tamano en GiB del volumen raiz"
+  type        = number
+  default     = 32
+}
+
+variable "root_volume_type" {
+  description = "Tipo de volumen raiz"
+  type        = string
+  default     = "gp3"
+}
+
+variable "root_volume_encrypted" {
+  description = "Cifrado del volumen raiz"
+  type        = bool
+  default     = false
+}

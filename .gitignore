@@ -29,8 +29,8 @@ terraform.rc
 # Los .tfvars suelen traer secretos. Se ignoran por defecto...
 *.tfvars
 *.tfvars.json
-# ...pero los de enviroments/ son config publica del proyecto y si se versionan.
-!enviroments/*.tfvars
+# ...pero los de environments/ son config publica del proyecto y si se versionan.
+!environments/*.tfvars
 
 # NOTA: .terraform.lock.hcl SI se sube al repo (fija versiones de providers).
 

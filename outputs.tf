@@ -12,3 +12,23 @@ output "private_subnets" {
   description = "IDs de las subredes privadas"
   value       = module.network.private_subnets
 }
+
+output "sg_lab_id" {
+  description = "ID del Security Group del laboratorio"
+  value       = module.security.sg_lab_id
+}
+
+output "instance_id" {
+  description = "ID de la instancia EC2"
+  value       = module.compute.instance_id
+}
+
+output "instance_public_ip" {
+  description = "IP publica de la instancia EC2"
+  value       = module.compute.instance_public_ip
+}
+
+output "instance_public_dns" {
+  description = "DNS publico de la instancia EC2"
+  value       = module.compute.instance_public_dns
+}
