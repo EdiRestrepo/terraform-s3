@@ -32,3 +32,8 @@ output "instance_public_dns" {
   description = "DNS publico de la instancia EC2"
   value       = module.compute.instance_public_dns
 }
+
+output "alb_dns_name" {
+  description = "DNS publico del Application Load Balancer"
+  value       = module.load_balancer.alb_dns_name
+}

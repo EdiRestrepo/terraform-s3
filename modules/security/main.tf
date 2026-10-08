@@ -32,3 +32,29 @@ resource "aws_vpc_security_group_egress_rule" "http" {
   to_port           = 80
   cidr_ipv4         = "0.0.0.0/0"
 }
+
+############# Security Group del ALB #############
+
+resource "aws_security_group" "alb" {
+  name        = "SG-ALB-${terraform.workspace}"
+  description = "Security group del Application Load Balancer"
+  vpc_id      = var.vpc_id
+
+  tags = { Name = "SG-ALB-${terraform.workspace}" }
+}
+
+# HTTP entrante desde internet
+resource "aws_vpc_security_group_ingress_rule" "alb_http" {
+  security_group_id = aws_security_group.alb.id
+  ip_protocol       = "tcp"
+  from_port         = 80
+  to_port           = 80
+  cidr_ipv4         = "0.0.0.0/0"
+}
+
+# Salida de todo el tráfico (hacia los targets y health checks)
+resource "aws_vpc_security_group_egress_rule" "alb_all" {
+  security_group_id = aws_security_group.alb.id
+  ip_protocol       = "-1"
+  cidr_ipv4         = "0.0.0.0/0"
+}

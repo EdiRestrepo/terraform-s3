@@ -29,3 +29,12 @@ module "compute" {
   root_volume_type      = var.root_volume_type
   root_volume_encrypted = var.root_volume_encrypted
 }
+
+module "load_balancer" {
+  source = "./modules/load_balancer"
+
+  vpc_id         = module.network.vpc_id
+  public_subnets = module.network.public_subnets
+  alb_sg_id      = module.security.sg_alb_id
+  instance_id    = module.compute.instance_id
+}
