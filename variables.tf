@@ -56,30 +56,36 @@ variable "priv_subnets_az" {
 
 ########## Security Group ##########
 
-variable "sg_name" {
-  description = "Prefijo de nombre para el Security Group"
+variable "admin_cidr" {
+  description = "CIDR desde el que se permite SSH y kubectl (6443) al control plane"
   type        = string
-  default     = "SG-Lab-ITM"
-}
-
-variable "sg_description" {
-  description = "Descripcion del Security Group"
-  type        = string
-  default     = "Security group prueba"
+  default     = "0.0.0.0/0"
 }
 
 ########## EC2 ##########
 
-variable "instance_name" {
-  description = "Prefijo de nombre para la instancia EC2"
+variable "instance_name_control_plane" {
+  description = "Prefijo de nombre para la instancia EC2 control plane"
   type        = string
-  default     = "EC2-Lab-ITM"
+  default     = "EC2-Lab-ITM-Control-Plane"
 }
 
-variable "instance_type" {
-  description = "Tipo de instancia EC2"
+variable "instance_name_worker" {
+  description = "Prefijo de nombre para la instancia EC2 worker"
   type        = string
-  default     = "t3.micro"
+  default     = "EC2-Lab-ITM-Worker"
+}
+
+variable "instance_type_control_plane" {
+  description = "Tipo de instancia EC2 del control plane"
+  type        = string
+  default     = "t3.medium"
+}
+
+variable "instance_type_worker" {
+  description = "Tipo de instancia EC2 del worker"
+  type        = string
+  default     = "t3.large"
 }
 
 variable "ami_id" {
@@ -104,4 +110,12 @@ variable "root_volume_encrypted" {
   description = "Cifrado del volumen raiz"
   type        = bool
   default     = false
+}
+
+########## EFS ##########
+
+variable "efs_name" {
+  description = "Prefijo de nombre para el EFS"
+  type        = string
+  default     = "efs-itm-lab"
 }

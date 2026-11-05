@@ -15,13 +15,14 @@ priv_subnets    = ["192.168.0.64/27", "192.168.0.96/27"]
 priv_subnets_az = ["us-east-1a", "us-east-1d"]
 
 ########## Security Group ##########
-sg_name        = "SG-Lab-ITM"
-sg_description = "Security group prueba"
+admin_cidr = "0.0.0.0/0" # Recomendado: tu IP publica con /32
 
 ########## EC2 ##########
-instance_name         = "EC2-Lab-ITM"
-instance_type         = "t3.micro"
-ami_id                = ""
-root_volume_size      = 32
-root_volume_type      = "gp3"
-root_volume_encrypted = false
+instance_name_control_plane = "EC2-Lab-ITM-Control-Plane"
+instance_name_worker        = "EC2-Lab-ITM-Worker"
+instance_type_control_plane = "t3.medium"
+instance_type_worker        = "t3.large"
+ami_id                      = ""
+root_volume_size            = 32
+root_volume_type            = "gp3"
+root_volume_encrypted       = false

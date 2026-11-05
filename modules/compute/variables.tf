@@ -1,23 +1,45 @@
-variable "subnet_id" {
-  description = "ID de la subred donde se despliega la instancia"
+variable "public_subnet_id" {
+  description = "ID de la subred publica donde se despliega el control plane"
   type        = string
 }
 
-variable "sg_lab_id" {
-  description = "ID del Security Group creado en el modulo security"
+variable "private_subnet_id" {
+  description = "ID de la subred privada donde se despliega el worker"
   type        = string
 }
 
-variable "instance_name" {
-  description = "Prefijo de nombre para la instancia EC2"
+variable "sg_control_plane_id" {
+  description = "ID del Security Group del control plane creado en el modulo security"
   type        = string
-  default     = "EC2-Lab-ITM"
 }
 
-variable "instance_type" {
-  description = "Tipo de instancia EC2"
+variable "sg_worker_id" {
+  description = "ID del Security Group del worker creado en el modulo security"
   type        = string
-  default     = "t3.micro"
+}
+
+variable "instance_name_control_plane" {
+  description = "Prefijo de nombre para la instancia EC2 control plane"
+  type        = string
+  default     = "EC2-Lab-ITM-Control-Plane"
+}
+
+variable "instance_name_worker" {
+  description = "Prefijo de nombre para la instancia EC2 worker"
+  type        = string
+  default     = "EC2-Lab-ITM-Worker"
+}
+
+variable "instance_type_control_plane" {
+  description = "Tipo de instancia EC2 del control plane"
+  type        = string
+  default     = "t3.medium"
+}
+
+variable "instance_type_worker" {
+  description = "Tipo de instancia EC2 del worker"
+  type        = string
+  default     = "t3.large"
 }
 
 variable "ami_id" {

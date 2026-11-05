@@ -3,14 +3,8 @@ variable "vpc_id" {
   type        = string
 }
 
-variable "sg_name" {
-  description = "Prefijo de nombre para el Security Group"
+variable "admin_cidr" {
+  description = "CIDR desde el que se permite SSH y kubectl (6443) al control plane"
   type        = string
-  default     = "SG-Lab-ITM"
-}
-
-variable "sg_description" {
-  description = "Descripcion del Security Group"
-  type        = string
-  default     = "Security group prueba"
+  default     = "0.0.0.0/0"
 }
