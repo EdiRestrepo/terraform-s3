@@ -57,3 +57,25 @@ output "efs_dns_name" {
   description = "DNS del EFS para montarlo por NFS"
   value       = module.storage.efs_dns_name
 }
+
+output "db_endpoint" {
+  description = "Endpoint de conexion (host:puerto) de RDS"
+  value       = module.db.db_endpoint
+}
+
+output "db_password" {
+  description = "Clave del usuario maestro de RDS"
+  value       = module.db.db_password
+  sensitive   = true
+}
+
+output "redis_primary_endpoint" {
+  description = "Endpoint del nodo primario de Redis"
+  value       = module.cache.redis_primary_endpoint
+}
+
+output "redis_auth_token" {
+  description = "Token de autenticacion de Redis"
+  value       = module.cache.redis_auth_token
+  sensitive   = true
+}

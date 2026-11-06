@@ -49,3 +49,35 @@ module "storage" {
   subnet_ids = module.network.private_subnets
   efs_sg_id  = module.security.sg_efs_id
 }
+
+module "db" {
+  source = "./modules/db"
+
+  vpc_id                  = module.network.vpc_id
+  subnet_ids              = module.network.private_subnets
+  sg_control_plane_id     = module.security.sg_control_plane_id
+  sg_worker_id            = module.security.sg_worker_id
+  engine_version          = var.db_engine_version
+  instance_class          = var.db_instance_class
+  allocated_storage       = var.db_allocated_storage
+  max_allocated_storage   = var.db_max_allocated_storage
+  db_name                 = var.db_name
+  db_username             = var.db_username
+  multi_az                = var.db_multi_az
+  backup_retention_period = var.db_backup_retention_period
+  deletion_protection     = var.db_deletion_protection
+  skip_final_snapshot     = var.db_skip_final_snapshot
+}
+
+module "cache" {
+  source = "./modules/cache"
+
+  vpc_id                   = module.network.vpc_id
+  subnet_ids               = module.network.private_subnets
+  sg_control_plane_id      = module.security.sg_control_plane_id
+  sg_worker_id             = module.security.sg_worker_id
+  engine_version           = var.redis_engine_version
+  node_type                = var.redis_node_type
+  num_cache_clusters       = var.redis_num_cache_clusters
+  snapshot_retention_limit = var.redis_snapshot_retention_limit
+}

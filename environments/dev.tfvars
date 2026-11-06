@@ -26,3 +26,20 @@ ami_id                      = ""
 root_volume_size            = 32
 root_volume_type            = "gp3"
 root_volume_encrypted       = false
+
+########## RDS ##########
+db_engine_version          = "16"
+db_instance_class          = "db.t4g.micro"
+db_allocated_storage       = 20
+db_max_allocated_storage   = 50
+db_name                    = "n8n"
+db_username                = "n8n_admin"
+db_backup_retention_period = 7
+db_deletion_protection     = false
+db_skip_final_snapshot     = true
+
+########## ElastiCache ##########
+redis_engine_version           = "7.1"
+redis_node_type                = "cache.t4g.micro"
+redis_num_cache_clusters       = 1
+redis_snapshot_retention_limit = 7

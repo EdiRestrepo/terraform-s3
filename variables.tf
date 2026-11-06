@@ -119,3 +119,91 @@ variable "efs_name" {
   type        = string
   default     = "efs-itm-lab"
 }
+
+########## RDS ##########
+
+variable "db_engine_version" {
+  description = "Version de PostgreSQL (mayor o mayor.menor)"
+  type        = string
+  default     = "16"
+}
+
+variable "db_instance_class" {
+  description = "Clase de instancia RDS"
+  type        = string
+  default     = "db.t4g.micro"
+}
+
+variable "db_allocated_storage" {
+  description = "Almacenamiento inicial de RDS en GiB"
+  type        = number
+  default     = 20
+}
+
+variable "db_max_allocated_storage" {
+  description = "Limite de autoescalado de almacenamiento de RDS en GiB (0 = desactivado)"
+  type        = number
+  default     = 50
+}
+
+variable "db_name" {
+  description = "Nombre de la base de datos inicial"
+  type        = string
+  default     = "n8n"
+}
+
+variable "db_username" {
+  description = "Usuario maestro de la base de datos"
+  type        = string
+  default     = "n8n_admin"
+}
+
+variable "db_multi_az" {
+  description = "Habilita standby de RDS en otra AZ"
+  type        = bool
+  default     = false
+}
+
+variable "db_backup_retention_period" {
+  description = "Dias de retencion de backups automaticos de RDS"
+  type        = number
+  default     = 7
+}
+
+variable "db_deletion_protection" {
+  description = "Protege la instancia RDS contra borrado"
+  type        = bool
+  default     = false
+}
+
+variable "db_skip_final_snapshot" {
+  description = "Omite el snapshot final al destruir RDS"
+  type        = bool
+  default     = true
+}
+
+########## ElastiCache ##########
+
+variable "redis_engine_version" {
+  description = "Version de Redis"
+  type        = string
+  default     = "7.1"
+}
+
+variable "redis_node_type" {
+  description = "Tipo de nodo de ElastiCache"
+  type        = string
+  default     = "cache.t4g.micro"
+}
+
+variable "redis_num_cache_clusters" {
+  description = "Numero de nodos Redis (1 = solo primario, 2+ = replicas con failover)"
+  type        = number
+  default     = 1
+}
+
+variable "redis_snapshot_retention_limit" {
+  description = "Dias de retencion de snapshots de Redis (0 = desactivado)"
+  type        = number
+  default     = 7
+}
