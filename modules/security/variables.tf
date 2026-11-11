@@ -4,7 +4,7 @@ variable "vpc_id" {
 }
 
 variable "admin_cidr" {
-  description = "CIDR desde el que se permite SSH y kubectl (6443) al control plane"
+  description = "CIDR desde el que se permite SSH y kubectl (6443) al master"
   type        = string
   default     = "0.0.0.0/0"
 }

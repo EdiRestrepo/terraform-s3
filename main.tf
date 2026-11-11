@@ -19,18 +19,19 @@ module "security" {
 module "compute" {
   source = "./modules/compute"
 
-  public_subnet_id            = module.network.public_subnets[0]
-  private_subnet_id           = module.network.private_subnets[0]
-  sg_control_plane_id         = module.security.sg_control_plane_id
-  sg_worker_id                = module.security.sg_worker_id
-  instance_name_control_plane = var.instance_name_control_plane
-  instance_name_worker        = var.instance_name_worker
-  instance_type_control_plane = var.instance_type_control_plane
-  instance_type_worker        = var.instance_type_worker
-  ami_id                      = var.ami_id
-  root_volume_size            = var.root_volume_size
-  root_volume_type            = var.root_volume_type
-  root_volume_encrypted       = var.root_volume_encrypted
+  public_subnet_id      = module.network.public_subnets[0]
+  private_subnet_id     = module.network.private_subnets[0]
+  sg_master_id          = module.security.sg_master_id
+  sg_worker_id          = module.security.sg_worker_id
+  instance_name_master  = var.instance_name_master
+  instance_name_worker  = var.instance_name_worker
+  instance_type_master  = var.instance_type_master
+  instance_type_worker  = var.instance_type_worker
+  ami_id                = var.ami_id
+  root_volume_size      = var.root_volume_size
+  root_volume_type      = var.root_volume_type
+  root_volume_encrypted = var.root_volume_encrypted
+  key_pair_name         = var.key_pair_name
 }
 
 module "load_balancer" {
@@ -39,7 +40,7 @@ module "load_balancer" {
   vpc_id         = module.network.vpc_id
   public_subnets = module.network.public_subnets
   alb_sg_id      = module.security.sg_alb_id
-  instance_id    = module.compute.control_plane_id
+  instance_id    = module.compute.master_id
 }
 
 module "storage" {
@@ -55,7 +56,7 @@ module "db" {
 
   vpc_id                  = module.network.vpc_id
   subnet_ids              = module.network.private_subnets
-  sg_control_plane_id     = module.security.sg_control_plane_id
+  sg_master_id            = module.security.sg_master_id
   sg_worker_id            = module.security.sg_worker_id
   engine_version          = var.db_engine_version
   instance_class          = var.db_instance_class
@@ -74,7 +75,7 @@ module "cache" {
 
   vpc_id                   = module.network.vpc_id
   subnet_ids               = module.network.private_subnets
-  sg_control_plane_id      = module.security.sg_control_plane_id
+  sg_master_id             = module.security.sg_master_id
   sg_worker_id             = module.security.sg_worker_id
   engine_version           = var.redis_engine_version
   node_type                = var.redis_node_type

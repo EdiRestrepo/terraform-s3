@@ -13,24 +13,34 @@ output "private_subnets" {
   value       = module.network.private_subnets
 }
 
-output "control_plane_id" {
-  description = "ID de la instancia EC2 control plane"
-  value       = module.compute.control_plane_id
+output "master_id" {
+  description = "ID de la instancia EC2 master"
+  value       = module.compute.master_id
 }
 
-output "control_plane_public_ip" {
-  description = "IP publica de la instancia EC2 control plane"
-  value       = module.compute.control_plane_public_ip
+output "master_public_ip" {
+  description = "IP publica de la instancia EC2 master"
+  value       = module.compute.master_public_ip
 }
 
-output "control_plane_public_dns" {
-  description = "DNS publico de la instancia EC2 control plane"
-  value       = module.compute.control_plane_public_dns
+output "master_public_dns" {
+  description = "DNS publico de la instancia EC2 master"
+  value       = module.compute.master_public_dns
 }
 
-output "control_plane_private_ip" {
-  description = "IP privada de la instancia EC2 control plane"
-  value       = module.compute.control_plane_private_ip
+output "master_private_ip" {
+  description = "IP privada de la instancia EC2 master"
+  value       = module.compute.master_private_ip
+}
+
+output "key_pair_name" {
+  description = "Nombre del Key Pair creado en AWS"
+  value       = module.compute.key_pair_name
+}
+
+output "ssh_private_key_path" {
+  description = "Ruta local del archivo .pem para conectarse por SSH al master"
+  value       = module.compute.ssh_private_key_path
 }
 
 output "worker_id" {

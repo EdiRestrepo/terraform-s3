@@ -18,14 +18,15 @@ priv_subnets_az = ["us-east-1a", "us-east-1d"]
 admin_cidr = "0.0.0.0/0" # Recomendado: tu IP publica con /32
 
 ########## EC2 ##########
-instance_name_control_plane = "EC2-Lab-ITM-Control-Plane"
-instance_name_worker        = "EC2-Lab-ITM-Worker"
-instance_type_control_plane = "t3.medium"
-instance_type_worker        = "t3.large"
-ami_id                      = ""
-root_volume_size            = 32
-root_volume_type            = "gp3"
-root_volume_encrypted       = false
+instance_name_master  = "EC2-Lab-ITM-Master"
+instance_name_worker  = "EC2-Lab-ITM-Worker"
+instance_type_master  = "t3.medium"
+instance_type_worker  = "t3.large"
+ami_id                = ""
+root_volume_size      = 32
+root_volume_type      = "gp3"
+root_volume_encrypted = false
+key_pair_name         = "KP-ITMLab"
 
 ########## RDS ##########
 db_engine_version          = "16"

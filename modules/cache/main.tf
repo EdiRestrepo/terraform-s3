@@ -16,13 +16,13 @@ resource "aws_security_group" "redis" {
   tags = { Name = "SG-Redis-${terraform.workspace}" }
 }
 
-# Redis entrante desde el control plane
-resource "aws_vpc_security_group_ingress_rule" "redis_control_plane" {
+# Redis entrante desde el master
+resource "aws_vpc_security_group_ingress_rule" "redis_master" {
   security_group_id            = aws_security_group.redis.id
   ip_protocol                  = "tcp"
   from_port                    = var.port
   to_port                      = var.port
-  referenced_security_group_id = var.sg_control_plane_id
+  referenced_security_group_id = var.sg_master_id
 }
 
 # Redis entrante desde el worker

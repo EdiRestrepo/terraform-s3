@@ -8,9 +8,9 @@ output "sg_efs_id" {
   value       = aws_security_group.efs.id
 }
 
-output "sg_control_plane_id" {
-  description = "ID del Security Group del control plane"
-  value       = aws_security_group.control_plane.id
+output "sg_master_id" {
+  description = "ID del Security Group del master"
+  value       = aws_security_group.master.id
 }
 
 output "sg_worker_id" {

@@ -57,17 +57,17 @@ variable "priv_subnets_az" {
 ########## Security Group ##########
 
 variable "admin_cidr" {
-  description = "CIDR desde el que se permite SSH y kubectl (6443) al control plane"
+  description = "CIDR desde el que se permite SSH y kubectl (6443) al master"
   type        = string
   default     = "0.0.0.0/0"
 }
 
 ########## EC2 ##########
 
-variable "instance_name_control_plane" {
-  description = "Prefijo de nombre para la instancia EC2 control plane"
+variable "instance_name_master" {
+  description = "Prefijo de nombre para la instancia EC2 master"
   type        = string
-  default     = "EC2-Lab-ITM-Control-Plane"
+  default     = "EC2-Lab-ITM-Master"
 }
 
 variable "instance_name_worker" {
@@ -76,8 +76,8 @@ variable "instance_name_worker" {
   default     = "EC2-Lab-ITM-Worker"
 }
 
-variable "instance_type_control_plane" {
-  description = "Tipo de instancia EC2 del control plane"
+variable "instance_type_master" {
+  description = "Tipo de instancia EC2 del master"
   type        = string
   default     = "t3.medium"
 }
@@ -110,6 +110,12 @@ variable "root_volume_encrypted" {
   description = "Cifrado del volumen raiz"
   type        = bool
   default     = false
+}
+
+variable "key_pair_name" {
+  description = "Prefijo del Key Pair que Terraform crea para SSH a las instancias"
+  type        = string
+  default     = "KP-ITMLab"
 }
 
 ########## EFS ##########

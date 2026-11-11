@@ -34,13 +34,13 @@ resource "aws_security_group" "efs" {
   tags = { Name = "SG-EFS-${terraform.workspace}" }
 }
 
-# NFS entrante desde el control plane
-resource "aws_vpc_security_group_ingress_rule" "efs_nfs_control_plane" {
+# NFS entrante desde el master
+resource "aws_vpc_security_group_ingress_rule" "efs_nfs_master" {
   security_group_id            = aws_security_group.efs.id
   ip_protocol                  = "tcp"
   from_port                    = 2049
   to_port                      = 2049
-  referenced_security_group_id = aws_security_group.control_plane.id
+  referenced_security_group_id = aws_security_group.master.id
 }
 
 # NFS entrante desde el worker
@@ -59,19 +59,19 @@ resource "aws_vpc_security_group_egress_rule" "efs_all" {
   cidr_ipv4         = "0.0.0.0/0"
 }
 
-############# Security Group del control plane (subred publica) #############
+############# Security Group del master (subred publica) #############
 
-resource "aws_security_group" "control_plane" {
-  name        = "SG-Control-Plane-${terraform.workspace}"
-  description = "Security group de la instancia control plane"
+resource "aws_security_group" "master" {
+  name        = "SG-Master-${terraform.workspace}"
+  description = "Security group de la instancia master"
   vpc_id      = var.vpc_id
 
-  tags = { Name = "SG-Control-Plane-${terraform.workspace}" }
+  tags = { Name = "SG-Master-${terraform.workspace}" }
 }
 
 # SSH entrante para administracion (tambien sirve de bastion hacia el worker)
-resource "aws_vpc_security_group_ingress_rule" "cp_ssh" {
-  security_group_id = aws_security_group.control_plane.id
+resource "aws_vpc_security_group_ingress_rule" "master_ssh" {
+  security_group_id = aws_security_group.master.id
   ip_protocol       = "tcp"
   from_port         = 22
   to_port           = 22
@@ -79,8 +79,8 @@ resource "aws_vpc_security_group_ingress_rule" "cp_ssh" {
 }
 
 # API de Kubernetes (kubectl) desde el administrador
-resource "aws_vpc_security_group_ingress_rule" "cp_api_admin" {
-  security_group_id = aws_security_group.control_plane.id
+resource "aws_vpc_security_group_ingress_rule" "master_api_admin" {
+  security_group_id = aws_security_group.master.id
   ip_protocol       = "tcp"
   from_port         = 6443
   to_port           = 6443
@@ -88,8 +88,8 @@ resource "aws_vpc_security_group_ingress_rule" "cp_api_admin" {
 }
 
 # API de Kubernetes desde el worker (registro del nodo)
-resource "aws_vpc_security_group_ingress_rule" "cp_api_worker" {
-  security_group_id            = aws_security_group.control_plane.id
+resource "aws_vpc_security_group_ingress_rule" "master_api_worker" {
+  security_group_id            = aws_security_group.master.id
   ip_protocol                  = "tcp"
   from_port                    = 6443
   to_port                      = 6443
@@ -97,8 +97,8 @@ resource "aws_vpc_security_group_ingress_rule" "cp_api_worker" {
 }
 
 # Kubelet desde el worker
-resource "aws_vpc_security_group_ingress_rule" "cp_kubelet_worker" {
-  security_group_id            = aws_security_group.control_plane.id
+resource "aws_vpc_security_group_ingress_rule" "master_kubelet_worker" {
+  security_group_id            = aws_security_group.master.id
   ip_protocol                  = "tcp"
   from_port                    = 10250
   to_port                      = 10250
@@ -106,8 +106,8 @@ resource "aws_vpc_security_group_ingress_rule" "cp_kubelet_worker" {
 }
 
 # Flannel VXLAN (red de los pods) desde el worker
-resource "aws_vpc_security_group_ingress_rule" "cp_flannel_worker" {
-  security_group_id            = aws_security_group.control_plane.id
+resource "aws_vpc_security_group_ingress_rule" "master_flannel_worker" {
+  security_group_id            = aws_security_group.master.id
   ip_protocol                  = "udp"
   from_port                    = 8472
   to_port                      = 8472
@@ -115,8 +115,8 @@ resource "aws_vpc_security_group_ingress_rule" "cp_flannel_worker" {
 }
 
 # HTTP desde el ALB
-resource "aws_vpc_security_group_ingress_rule" "cp_http_alb" {
-  security_group_id            = aws_security_group.control_plane.id
+resource "aws_vpc_security_group_ingress_rule" "master_http_alb" {
+  security_group_id            = aws_security_group.master.id
   ip_protocol                  = "tcp"
   from_port                    = 80
   to_port                      = 80
@@ -124,8 +124,8 @@ resource "aws_vpc_security_group_ingress_rule" "cp_http_alb" {
 }
 
 # Salida de todo el tráfico
-resource "aws_vpc_security_group_egress_rule" "cp_all" {
-  security_group_id = aws_security_group.control_plane.id
+resource "aws_vpc_security_group_egress_rule" "master_all" {
+  security_group_id = aws_security_group.master.id
   ip_protocol       = "-1"
   cidr_ipv4         = "0.0.0.0/0"
 }
@@ -140,31 +140,31 @@ resource "aws_security_group" "worker" {
   tags = { Name = "SG-Worker-${terraform.workspace}" }
 }
 
-# SSH solo desde el control plane (bastion)
-resource "aws_vpc_security_group_ingress_rule" "worker_ssh_cp" {
+# SSH solo desde el master (bastion)
+resource "aws_vpc_security_group_ingress_rule" "worker_ssh_master" {
   security_group_id            = aws_security_group.worker.id
   ip_protocol                  = "tcp"
   from_port                    = 22
   to_port                      = 22
-  referenced_security_group_id = aws_security_group.control_plane.id
+  referenced_security_group_id = aws_security_group.master.id
 }
 
-# Kubelet desde el control plane (logs, exec, metrics)
-resource "aws_vpc_security_group_ingress_rule" "worker_kubelet_cp" {
+# Kubelet desde el master (logs, exec, metrics)
+resource "aws_vpc_security_group_ingress_rule" "worker_kubelet_master" {
   security_group_id            = aws_security_group.worker.id
   ip_protocol                  = "tcp"
   from_port                    = 10250
   to_port                      = 10250
-  referenced_security_group_id = aws_security_group.control_plane.id
+  referenced_security_group_id = aws_security_group.master.id
 }
 
-# Flannel VXLAN desde el control plane
-resource "aws_vpc_security_group_ingress_rule" "worker_flannel_cp" {
+# Flannel VXLAN desde el master
+resource "aws_vpc_security_group_ingress_rule" "worker_flannel_master" {
   security_group_id            = aws_security_group.worker.id
   ip_protocol                  = "udp"
   from_port                    = 8472
   to_port                      = 8472
-  referenced_security_group_id = aws_security_group.control_plane.id
+  referenced_security_group_id = aws_security_group.master.id
 }
 
 # Flannel VXLAN entre workers (si se agregan mas)

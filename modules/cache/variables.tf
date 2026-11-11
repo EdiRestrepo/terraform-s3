@@ -8,8 +8,8 @@ variable "subnet_ids" {
   type        = list(string)
 }
 
-variable "sg_control_plane_id" {
-  description = "ID del Security Group del control plane (origen permitido)"
+variable "sg_master_id" {
+  description = "ID del Security Group del master (origen permitido)"
   type        = string
 }
 

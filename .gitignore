@@ -37,6 +37,10 @@ terraform.rc
 # ---- Credenciales / secretos ----
 *.pem
 *.key
+# Llaves SSH que genera Terraform (modulo compute)
+keys/
+# Kubeconfig descargado del master K3s (trae certificado de admin del cluster)
+kubeconfig-*.yaml
 .env
 .env.*
 !.env.example
