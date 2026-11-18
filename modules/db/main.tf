@@ -56,6 +56,8 @@ resource "aws_db_parameter_group" "this" {
   parameter {
     name  = "rds.force_ssl"
     value = var.force_ssl ? "1" : "0"
+    # AWS lo registra asi; sin declararlo Terraform muestra un cambio en cada plan
+    apply_method = "pending-reboot"
   }
 
   lifecycle {

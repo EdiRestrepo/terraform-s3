@@ -101,10 +101,19 @@ resource "aws_instance" "worker" {
 
   user_data_replace_on_change = true
 
-  # Espera a que el master levante el API (6443) y se une al cluster como agente
+  # El NAT Gateway se crea en paralelo y puede tardar en dar salida a internet,
+  # y el master tarda en levantar el API (6443). En vez de un sleep fijo se
+  # reintenta hasta que ambos respondan (maximo ~10 min) y luego se une al cluster.
   user_data = <<-EOF
               #!/bin/bash
-              sleep 60
+              for i in $(seq 1 60); do
+                curl -sf -m 10 -o /dev/null https://get.k3s.io && break
+                sleep 10
+              done
+              for i in $(seq 1 60); do
+                curl -sk -m 5 -o /dev/null https://${aws_instance.master.private_ip}:6443 && break
+                sleep 10
+              done
               curl -sfL https://get.k3s.io | K3S_URL=https://${aws_instance.master.private_ip}:6443 \
               K3S_TOKEN=${random_password.k3s_token.result} sh -
               EOF
