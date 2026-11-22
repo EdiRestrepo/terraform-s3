@@ -123,6 +123,15 @@ resource "aws_vpc_security_group_ingress_rule" "master_http_alb" {
   referenced_security_group_id = aws_security_group.alb.id
 }
 
+# Rango NodePort de Kubernetes desde el administrador (n8n se expone en 30678)
+resource "aws_vpc_security_group_ingress_rule" "master_nodeport_admin" {
+  security_group_id = aws_security_group.master.id
+  ip_protocol       = "tcp"
+  from_port         = 30000
+  to_port           = 32767
+  cidr_ipv4         = var.admin_cidr
+}
+
 # Salida de todo el tráfico
 resource "aws_vpc_security_group_egress_rule" "master_all" {
   security_group_id = aws_security_group.master.id

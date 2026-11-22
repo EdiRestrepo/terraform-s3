@@ -1,0 +1,48 @@
+# PV estatico NFS apuntando al EFS. Retain + resource-policy keep: ni un
+# `helm uninstall` ni el borrado del PVC eliminan los datos del EFS.
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: {{ .Release.Name }}-{{ .Release.Namespace }}-efs
+  labels:
+    {{- include "n8n.labels" . | nindent 4 }}
+  annotations:
+    helm.sh/resource-policy: keep
+spec:
+  capacity:
+    storage: {{ .Values.efs.size }}
+  accessModes:
+    - ReadWriteMany
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: ""
+  mountOptions:
+    - nfsvers=4.1
+    - rsize=1048576
+    - wsize=1048576
+    - hard
+    - timeo=600
+    - retrans=2
+    - noresvport
+  nfs:
+    server: {{ required "efs.server es obligatorio" .Values.efs.server | quote }}
+    path: {{ .Values.efs.path | quote }}
+  claimRef:
+    namespace: {{ .Release.Namespace }}
+    name: {{ .Release.Name }}-data
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ .Release.Name }}-data
+  labels:
+    {{- include "n8n.labels" . | nindent 4 }}
+  annotations:
+    helm.sh/resource-policy: keep
+spec:
+  accessModes:
+    - ReadWriteMany
+  storageClassName: ""
+  volumeName: {{ .Release.Name }}-{{ .Release.Namespace }}-efs
+  resources:
+    requests:
+      storage: {{ .Values.efs.size }}

@@ -1,0 +1,68 @@
+# Valores por defecto del chart. Los valores que dependen de la
+# infraestructura (endpoints de EFS, RDS, Redis e IP publica) los completa
+# scripts/deploy-n8n.sh a partir de los outputs de Terraform.
+
+image:
+  repository: docker.n8n.io/n8nio/n8n
+  # Fijar una version concreta; revisar https://github.com/n8n-io/n8n/releases
+  tag: "2.20.9"
+  pullPolicy: IfNotPresent
+
+# Secret (creado por scripts/deploy-n8n.sh) con las claves:
+# DB_POSTGRESDB_PASSWORD, QUEUE_BULL_REDIS_PASSWORD y N8N_ENCRYPTION_KEY.
+existingSecret: n8n-secrets
+# Hash del Secret (lo calcula el script) para reiniciar PODs si cambia.
+secretChecksum: ""
+
+timezone: America/Bogota
+
+# URL publica con la que se accede al editor y a los webhooks.
+# Se expone por NodePort (el SG solo lo permite desde admin_cidr_blocks).
+publicHost: ""
+service:
+  type: NodePort
+  port: 5678
+  nodePort: 30678
+
+# ---------------------------------------------------------------------------
+# EFS: volumen NFS estatico (sin CSI driver ni rol IAM). No tiene afinidad de
+# nodo, asi que el POD puede reprogramarse en cualquier nodo y recupera el
+# mismo directorio /home/node/.n8n.
+# ---------------------------------------------------------------------------
+efs:
+  server: ""       # DNS (o IP de mount target) del EFS
+  path: /          # raiz del EFS
+  subPath: n8n     # directorio dentro del EFS para /home/node/.n8n
+  size: 5Gi
+
+postgres:
+  host: ""
+  port: 5432
+  database: n8n
+  user: n8n_admin
+  # RDS exige SSL (rds.force_ssl=1); no se valida la CA de Amazon.
+  ssl: true
+  sslRejectUnauthorized: false
+
+redis:
+  host: ""
+  port: 6379
+  tls: true
+
+main:
+  resources:
+    requests:
+      cpu: 250m
+      memory: 512Mi
+    limits:
+      memory: 1Gi
+
+worker:
+  replicas: 1
+  concurrency: 10
+  resources:
+    requests:
+      cpu: 250m
+      memory: 512Mi
+    limits:
+      memory: 1Gi

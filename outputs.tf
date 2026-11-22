@@ -89,3 +89,36 @@ output "redis_auth_token" {
   value       = module.cache.redis_auth_token
   sensitive   = true
 }
+
+############# Datos para desplegar n8n (scripts/deploy-n8n.sh) #############
+
+output "db_address" {
+  description = "Hostname de PostgreSQL (RDS), sin puerto, para DB_POSTGRESDB_HOST"
+  value       = module.db.db_address
+}
+
+output "db_port" {
+  description = "Puerto de PostgreSQL"
+  value       = module.db.db_port
+}
+
+output "db_name" {
+  description = "Nombre de la base de datos"
+  value       = module.db.db_name
+}
+
+output "db_username" {
+  description = "Usuario maestro de la base de datos"
+  value       = module.db.db_username
+}
+
+output "redis_port" {
+  description = "Puerto de Redis"
+  value       = module.cache.redis_port
+}
+
+output "n8n_encryption_key" {
+  description = "N8N_ENCRYPTION_KEY. Ver con: terraform output -raw n8n_encryption_key"
+  value       = random_password.n8n_encryption_key.result
+  sensitive   = true
+}

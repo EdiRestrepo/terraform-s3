@@ -82,3 +82,12 @@ module "cache" {
   num_cache_clusters       = var.redis_num_cache_clusters
   snapshot_retention_limit = var.redis_snapshot_retention_limit
 }
+
+############# n8n #############
+
+# Clave con la que n8n cifra las credenciales guardadas en PostgreSQL.
+# Debe ser estable: si cambia, las credenciales ya guardadas no se pueden descifrar.
+resource "random_password" "n8n_encryption_key" {
+  length  = 48
+  special = false
+}
